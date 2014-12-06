@@ -5,4 +5,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="cyclone_tab_name">Cyclone</string>
+    <string name="shelter_tab_name">Shelter</string>
+    <string name="help_tab_name">Help</string>
+
+
+
 </resources>

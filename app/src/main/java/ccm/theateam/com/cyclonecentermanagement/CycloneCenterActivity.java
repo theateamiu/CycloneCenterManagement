@@ -1,17 +1,47 @@
 package ccm.theateam.com.cyclonecentermanagement;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TabHost;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
 
 
-public class CycloneCenterActivity extends Activity {
+public class CycloneCenterActivity extends Activity implements ActionBar.TabListener{
+    TabHost tabHost;
+    GoogleMap googleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cyclone_center);
+        init();
+    }
+
+    private void init() {
+        TabHost tabs = (TabHost)findViewById(R.id.tabHost);
+
+        tabs.setup();
+
+        TabHost.TabSpec tabSpec = tabs.newTabSpec("tag1");
+        tabSpec.setContent(R.id.cycloneMap);
+        tabSpec.setIndicator(getString(R.string.cyclone_tab_name));
+        tabs.addTab(tabSpec);
+
+        tabSpec = tabs.newTabSpec("tab2");
+        tabSpec.setContent(R.id.shelterMap);
+        tabSpec.setIndicator(getString(R.string.shelter_tab_name));
+        tabs.addTab(tabSpec);
+
+        tabSpec = tabs.newTabSpec("tag3");
+        tabSpec.setContent(R.id.helpsListView);
+        tabSpec.setIndicator(getString(R.string.help_tab_name));
+        tabs.addTab(tabSpec);
     }
 
 
@@ -32,5 +62,20 @@ public class CycloneCenterActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        Toast.makeText(this,tab.getText(),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
     }
 }
