@@ -10,5 +10,11 @@
     <string name="help_tab_name">Help</string>
 
 
+    <string-array name="help_list_view">
+        <item>Fire Brigade</item>
+        <item>Medical Center</item>
+        <item>Salvation</item>
+        <item>Information</item>
+    </string-array>
 
 </resources>

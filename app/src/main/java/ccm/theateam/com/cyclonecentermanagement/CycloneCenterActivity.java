@@ -1,18 +1,20 @@
 package ccm.theateam.com.cyclonecentermanagement;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class CycloneCenterActivity extends Activity implements ActionBar.TabListener{
+public class CycloneCenterActivity extends Activity implements TabHost.OnTabChangeListener {
     TabHost tabHost;
     GoogleMap googleMap;
 
@@ -28,12 +30,14 @@ public class CycloneCenterActivity extends Activity implements ActionBar.TabList
 
         tabs.setup();
 
+        createMapView(R.id.cycloneMap);
+
         TabHost.TabSpec tabSpec = tabs.newTabSpec("tag1");
         tabSpec.setContent(R.id.cycloneMap);
         tabSpec.setIndicator(getString(R.string.cyclone_tab_name));
         tabs.addTab(tabSpec);
 
-        tabSpec = tabs.newTabSpec("tab2");
+        tabSpec = tabs.newTabSpec("tag2");
         tabSpec.setContent(R.id.shelterMap);
         tabSpec.setIndicator(getString(R.string.shelter_tab_name));
         tabs.addTab(tabSpec);
@@ -42,6 +46,31 @@ public class CycloneCenterActivity extends Activity implements ActionBar.TabList
         tabSpec.setContent(R.id.helpsListView);
         tabSpec.setIndicator(getString(R.string.help_tab_name));
         tabs.addTab(tabSpec);
+
+        tabs.setOnTabChangedListener(this);
+
+    }
+
+    private void createMapView(int id) {
+        try{
+            if(null==googleMap){
+                googleMap = ((MapFragment)getFragmentManager().findFragmentById(id))
+                        .getMap();
+                // TODO: cyclone location
+                setMapMarker(0,0);
+            }
+        }catch (NullPointerException e){
+
+        }
+    }
+
+    private void setMapMarker(double lat,double lon){
+        googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(lat,lon))
+                        .title(getString(R.string.app_name))
+                        .draggable(true)
+        );
+
     }
 
 
@@ -64,18 +93,22 @@ public class CycloneCenterActivity extends Activity implements ActionBar.TabList
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        Toast.makeText(this,tab.getText(),Toast.LENGTH_LONG).show();
-    }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
+    public void onTabChanged(String s) {
+        if(s.equals("tag1")){
+            createMapView(R.id.cycloneMap);
+            // TODO: add marker
+        }else if(s.equals("tag2")){
+            createMapView(R.id.shelterMap);
+            // TODO: add marker
+        }else if(s.equals("tag3")){
+            ListView listView = (ListView)findViewById(R.id.helpsListView);
+            ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(
+                    getApplicationContext(),android.R.layout.simple_list_item_1,
+                    getResources().getStringArray(R.array.help_list_view)
+            );
+            listView.setAdapter(stringArrayAdapter);
+        }
     }
 }
